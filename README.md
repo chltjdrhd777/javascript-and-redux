@@ -9,4 +9,10 @@ It's my goal
 
 # And at the same time, I am going to learn Javascript basic
 
-Updating in Js.tsx series (Js1,Js2 ......)
+Updating in Js.tsx series in routes(Js1,Js2 ......)
+
+src/routes
+
+1. Js1 = loop
+2. Js2 = GEC,EC,Hoisting,scope-chain, and This
+3. Js3 = making a dice game
