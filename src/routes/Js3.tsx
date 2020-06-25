@@ -2,7 +2,10 @@ import React, { useState } from "react";
 import styled, { css } from "styled-components";
 import Bg from "../dice game/back.jpg";
 import { createGlobalStyle } from "styled-components";
-import dice from "../dice game/dice-1.png";
+//import dice from "../dice game/dice-1.png";
+//! comment : fuxx react requires "require(URL)" to import image if you want to utilize webpack.
+//! only if you want to import image files only, just use "import ... from ..."
+
 /*
 GAME RULES:
 
@@ -15,11 +18,23 @@ GAME RULES:
 
 export default () => {
   const [state, setState] = useState({
-    player1: { diceNumber: Math.floor(Math.random() * 6 + 1) },
-    player2: { diceNumber: Math.floor(Math.random() * 6 + 1) },
+    diceNumber: 1,
     diceShow: false,
+    current: 0,
+    playerChange: true,
   });
   console.log(state);
+
+  const rollDice = () => {
+    let dice = Math.floor(Math.random() * 6 + 1);
+    setState({
+      ...state,
+      diceNumber: dice,
+      diceShow: true,
+      current: state.current + dice,
+    });
+  };
+
   return (
     <>
       <Global />
@@ -29,13 +44,15 @@ export default () => {
           <Player1Score>0</Player1Score>
           <Player1Current>
             <Player1Label>current</Player1Label>
-            <Player1CurrentScore>0</Player1CurrentScore>
+            <Player1CurrentScore>
+              {state.playerChange ? state.current : 0}
+            </Player1CurrentScore>
           </Player1Current>
         </Player1>
 
         <Icons>
           <NewGame>new game</NewGame>
-          <RollDice>roll dice</RollDice>
+          <RollDice onClick={rollDice}>roll dice</RollDice>
           <Hold>hold</Hold>
         </Icons>
 
@@ -44,11 +61,16 @@ export default () => {
           <Player2Score>0</Player2Score>
           <Player2Current>
             <Player2Label>current</Player2Label>
-            <Player2CurrentScore>0</Player2CurrentScore>
+            <Player2CurrentScore>
+              {state.playerChange ? 0 : state.current}
+            </Player2CurrentScore>
           </Player2Current>
         </Player2>
-
-        <Dice alt="Dice" src={dice} show={state.diceShow} />
+        <Dice
+          alt="Dice"
+          src={require(`../dice game/dice-${state.diceNumber}.png`)}
+          show={state.diceShow}
+        />
       </Container>
     </>
   );
