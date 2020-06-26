@@ -8,7 +8,6 @@ import { createGlobalStyle } from "styled-components";
 
 /*
 GAME RULES:
-
 - The game has 2 players, playing in rounds
 - In each turn, a player rolls a dice as many times as he whishes. Each result get added to his ROUND score
 - BUT, if the player rolls a 1, all his ROUND score gets lost. After that, it's the next player's turn
@@ -20,18 +19,66 @@ export default () => {
   const [state, setState] = useState({
     diceNumber: 1,
     diceShow: false,
-    current: 0,
+    current1: 0,
+    getScore1: 0,
+    current2: 0,
+    getScore2: 0,
     playerChange: true,
   });
   console.log(state);
 
   const rollDice = () => {
     let dice = Math.floor(Math.random() * 6 + 1);
+    if (state.playerChange) {
+      setState({
+        ...state,
+        diceNumber: dice,
+        diceShow: true,
+        current1: state.current1 + dice,
+      });
+    } else {
+      setState({
+        ...state,
+        diceNumber: dice,
+        diceShow: true,
+        current2: state.current2 + dice,
+      });
+    }
+  };
+
+  const hold = () => {
+    if (state.playerChange) {
+      setState({
+        ...state,
+        getScore1: state.getScore1 + state.current1,
+        current1: 0,
+        playerChange: !state.playerChange,
+      });
+    } else {
+      setState({
+        ...state,
+        getScore2: state.getScore2 + state.current2,
+        current2: 0,
+        playerChange: !state.playerChange,
+      });
+    }
+
+    if (state.getScore1 > 100) {
+      alert("player1 win");
+    } else if (state.getScore2 > 100) {
+      alert("player2 win");
+    }
+  };
+
+  const reset = () => {
     setState({
-      ...state,
-      diceNumber: dice,
-      diceShow: true,
-      current: state.current + dice,
+      diceNumber: 1,
+      diceShow: false,
+      current1: 0,
+      getScore1: 0,
+      current2: 0,
+      getScore2: 0,
+      playerChange: true,
     });
   };
 
@@ -41,28 +88,28 @@ export default () => {
       <Container>
         <Player1>
           <Player1Name>Player 1</Player1Name>
-          <Player1Score>0</Player1Score>
+          <Player1Score>{state.getScore1}</Player1Score>
           <Player1Current>
             <Player1Label>current</Player1Label>
             <Player1CurrentScore>
-              {state.playerChange ? state.current : 0}
+              {state.playerChange ? state.current1 : 0}
             </Player1CurrentScore>
           </Player1Current>
         </Player1>
 
         <Icons>
-          <NewGame>new game</NewGame>
+          <NewGame onClick={reset}>new game</NewGame>
           <RollDice onClick={rollDice}>roll dice</RollDice>
-          <Hold>hold</Hold>
+          <Hold onClick={hold}>hold</Hold>
         </Icons>
 
         <Player2>
           <Player2Name>Player 2</Player2Name>
-          <Player2Score>0</Player2Score>
+          <Player2Score>{state.getScore2}</Player2Score>
           <Player2Current>
             <Player2Label>current</Player2Label>
             <Player2CurrentScore>
-              {state.playerChange ? 0 : state.current}
+              {state.playerChange ? 0 : state.current2}
             </Player2CurrentScore>
           </Player2Current>
         </Player2>
@@ -95,7 +142,6 @@ const Global = createGlobalStyle`
   position: relative;
   color: #555;
   }
-
   button{
   background: none;
   border: none;
@@ -114,7 +160,6 @@ const Global = createGlobalStyle`
         transition:0.3s ease-in-out;
     }
 }
-
  
 `;
 
