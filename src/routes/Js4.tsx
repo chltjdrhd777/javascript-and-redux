@@ -25,6 +25,7 @@ export default () => {
   const john = new (Person as any)("John", 1990, "teacher");
   const marry = new (Person as any)("Marry", 1991, "police");
   console.log(john);
+  console.log(marry);
 
   //? then, How does inheritance works?
   //As I saw, inheritance is realized by "prototype chain"
@@ -68,6 +69,8 @@ export default () => {
       this.yearOfBirth = yearOfBirth;
     }
   }
+  const b = new Person2full("a", 2);
+  console.log(b);
   // fucking redundancy
 
   //in class, prototype is realized by "extends"
