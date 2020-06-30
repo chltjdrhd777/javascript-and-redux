@@ -88,5 +88,41 @@ export default () => {
   console.log(cantChange); // {name:'you cant change this'}
   // cantChange.name = 'yes, can't change it' <----- this makes an error because "name" property is "private"
 
+  //? function.call
+  //it changed the direction of "this" in the Object and execute it.
+
+  const defaultObj = function (this: any, name: string, age: number) {
+    this.name = name;
+    this.age = age;
+    this.calculation = function (comment: string) {
+      const answer = `${this.age} is young...${comment}`;
+      return answer;
+    }; //this = window
+  };
+
+  const anderson = new (defaultObj as any)("anderson", 2);
+  console.log(anderson.calculation()); // '2' is young //"this" = anderson
+
+  //! how to change and reuse "this" in the target object
+  const maryIdentity = { name: "Mary", age: 3 };
+  const mary = anderson.calculation.call(maryIdentity, "to work"); //first: target object, second~....: arguments in the method
+  console.log(mary); // '3' is young //"this" = maryIdentity
+
+  //? function.apply
+  //similar to call()
+  //the only difference is this accepts arguments as an array
+
+  //? function.bind
+  //similar to call()
+  //the only difference is bind() doesn't call a function immediatly but copy it
+  //it is replace "this" in the default object with "this" in the target object
+
+  const defaultBind = { name: "practice" };
+  const bindObject = function (this: any) {
+    console.log(`${this.name} is great`);
+  }; // "this" = window
+  const binding = bindObject.bind(defaultBind); // "this" = defaultBind
+  console.log(binding()); //"practice is great"
+
   return <div></div>;
 };
