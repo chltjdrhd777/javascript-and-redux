@@ -1,12 +1,14 @@
 import React from "react";
 import { HashRouter as Router, Route } from "react-router-dom";
-import Home from "./routes/Home";
-import Js1 from "./routes/Js1";
-import Js2 from "./routes/Js2";
-import Js3 from "./routes/Js3";
-import Js4 from "./routes/Js4";
-import Js5 from "./routes/Js5";
-import Js6 from "./routes/Js6";
+import Home from "./routes/past/Home";
+import Js1 from "./routes/past/Js1";
+import Js2 from "./routes/past/Js2";
+import Js3 from "./routes/past/Js3";
+import Js4 from "./routes/past/Js4";
+import Js5 from "./routes/past/Js5";
+import Js6 from "./routes/past/Js6";
+import Js7 from "./routes/Js7";
+import example from "./routes/example";
 
 function App() {
   return (
@@ -18,6 +20,8 @@ function App() {
       <Route exact path="/js4" component={Js4} />
       <Route exact path="/js5" component={Js5} />
       <Route exact path="/js6" component={Js6} />
+      <Route exact path="/js7" component={Js7} />
+      <Route exact path="/example" component={example} />
     </Router>
   );
 }

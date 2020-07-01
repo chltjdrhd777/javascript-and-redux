@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import styled, { css } from "styled-components";
-import Bg from "../dice game/back.jpg";
+import Bg from "./dice game/back.jpg";
 import { createGlobalStyle } from "styled-components";
-//import dice from "../dice game/dice-1.png";
+
 //! comment : fuxx react requires "require(URL)" to import image if you want to utilize webpack.
 //! only if you want to import image files only, just use "import ... from ..."
 
@@ -115,7 +115,7 @@ export default () => {
         </Player2>
         <Dice
           alt="Dice"
-          src={require(`../dice game/dice-${state.diceNumber}.png`)}
+          src={require(`./dice game/dice-${state.diceNumber}.png`)}
           show={state.diceShow}
         />
       </Container>

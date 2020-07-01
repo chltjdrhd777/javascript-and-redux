@@ -1,0 +1,122 @@
+/*** global part */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  color: #555;
+  font-family: Open Sans;
+  font-size: 16px;
+  position: relative;
+  height: 100vh;
+  font-weight: 400;
+}
+/* Im not gonna use this because I want to unify every css into css.module
+/* .clearFix::after {
+  content: "";
+  display: table;
+  clear: both;
+} */
+
+/* .right {
+  float: right;
+} */
+
+#red {
+  color: #ff5049;
+}
+#red-focus:focus {
+  border: 1px solid #ff5049;
+}
+
+/*** top part ******************************************************/
+/*******************************************************************/
+.top {
+  height: 50vh;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.35)),
+    url(back.png);
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+
+.budget {
+  position: absolute;
+  color: white;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.budget_title {
+  font-size: 20px;
+  text-align: center;
+  margin-bottom: 10px;
+  font-weight: 300;
+}
+
+.budget_title_month {
+  font-weight: 500;
+  color: rgb(83, 146, 241);
+}
+
+.budget_value {
+  font-weight: 500;
+  font-size: 45px;
+  text-align: center;
+  margin-bottom: 10px;
+  letter-spacing: 3px;
+  color: rgba(253, 253, 24, 0.884);
+  -webkit-text-stroke-width: 2px;
+  -webkit-text-stroke-color: rgb(233, 218, 10);
+}
+
+.budget_income,
+.budget_expenses {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 325px;
+  height: 40px;
+  margin-bottom: 5px;
+  background-color: #28b9b5;
+  font-size: 17px;
+  text-transform: uppercase;
+}
+
+.budget_income_text,
+.budget_expenses_text {
+  color: #555;
+  margin-top: 1px;
+  margin-left: 10px;
+}
+
+.income_result,
+.Expenses_result {
+  width: 150px;
+  text-align: center;
+  margin-right: 20px;
+  letter-spacing: 1px;
+}
+
+.budget_income_value,
+.budget_expenses_value {
+  float: left;
+}
+.budget_income_percentage,
+.budget_expenses_percentage {
+  float: right;
+  background-color: #254ed4;
+  border-radius: 3px;
+  padding-bottom: 1px;
+}
+
+.budget_expenses {
+  background-color: #ff5049;
+}
+
+.budget_expenses_percentage {
+  background-color: rgba(255, 255, 255, 0.2);
+}

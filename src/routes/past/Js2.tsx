@@ -80,10 +80,10 @@ function first() {
 
 //3. function in a method : although it is in the method, this function is now a regular function call
 //so, answer is "calling window object"
-const container = {
+/* const container = {
   returnWindow: () => {
     function callWindow(this: any) {
       console.log(this); //<---- returns window object
     }
   },
-};
+}; */

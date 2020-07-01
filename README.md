@@ -15,6 +15,11 @@ src/routes
 
 1. Js1 = loop
 2. Js2 = GEC,EC,Hoisting,scope-chain, and This
+
 3. Js3 = making a dice game
+
 4. Js4 = object oriented development, prototype
 5. Js5 = IIFE, Closure, Object.call(),bind(),apply()
+6. Js6 = Practice the concept of Js5 (IIFE,Closure);
+
+7. Js7 = Budget calculator project

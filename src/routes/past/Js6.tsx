@@ -17,7 +17,6 @@ export default () => {
 
     Question.prototype.displayQuestion = function (this: any) {
       console.log(this.question);
-
       for (let i = 0; i < this.answers.length; i++) {
         console.log(`${i} : ${this.answers[i]}`);
       }
@@ -42,10 +41,20 @@ export default () => {
       ["walk", "swimming"],
       1
     );
-    let questions = [q1, q2, q3];
-    let n = Math.floor(Math.random() * questions.length);
-    let answer = parseInt(prompt(questions[n].question)!);
-    questions[n].checkAnswer(answer);
+
+    const questions = [q1, q2, q3];
+
+    function nextQuestion() {
+      let n = Math.floor(Math.random() * questions.length);
+      let answer = prompt(questions[n].question)!;
+      questions[n].displayQuestion();
+      if (answer !== "exit") {
+        questions[n].checkAnswer(parseInt(answer));
+        nextQuestion();
+      }
+    }
+
+    nextQuestion();
   })();
 
   return <div></div>;
