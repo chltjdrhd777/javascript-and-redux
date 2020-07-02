@@ -120,3 +120,104 @@ body {
 .budget_expenses_percentage {
   background-color: rgba(255, 255, 255, 0.2);
 }
+
+/*** Input part ******************************************************/
+/*******************************************************************/
+.add {
+  padding: 15px;
+  border-bottom: 1px solid #c0bfbf;
+  background-color: #eceaea;
+}
+
+.add_container {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+}
+
+.add_type {
+  width: 55px;
+  height: 40px;
+  border: 1px solid #e7e7e7;
+  font-size: 20px;
+  color: inherit; /* refer to body's color*/
+  margin-right: 10px;
+  font-weight: 700;
+}
+
+.add_description,
+.add_value {
+  border: 1px solid #e7e7e7;
+  color: inherit;
+  font-family: inherit;
+  font-size: 15px;
+  width: 250px;
+  margin-right: 10px;
+  border-radius: 5px;
+}
+
+.add_description::placeholder {
+  color: #8da6f8;
+  font-weight: 500;
+}
+.add_value {
+  width: 100px;
+}
+.add_value::placeholder {
+  color: #c7ca1a;
+  font-weight: 500;
+}
+
+.add_type:focus,
+.add_description:focus,
+.add_value:focus {
+  outline: none;
+  border: 1px solid #28b9b5;
+  transition: border 0.5s;
+}
+
+.add_btn {
+  border: none;
+  font-size: 35px;
+  color: #28b9b5;
+  cursor: pointer;
+  width: 10px;
+  margin-top: 3px;
+}
+.add_btn:active {
+  transform: translateY(2px);
+  transition: transform 0.2s ease-in-out;
+}
+.add_btn:focus {
+  outline: none;
+}
+
+/*** List part ******************************************************/
+/*******************************************************************/
+.spending_list {
+  height: 60vh;
+  display: flex;
+  justify-content: center;
+}
+
+.income,
+.expense {
+  width: 300px;
+  text-align: center;
+  margin-right: 30px;
+}
+
+h2 {
+  text-transform: uppercase;
+  font-size: 18px;
+  font-weight: 400;
+  margin-bottom: 15px;
+}
+
+.income_title {
+  color: #c7ca1a;
+}
+
+.expense_title {
+  color: #ff5049;
+}

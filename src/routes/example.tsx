@@ -47,7 +47,7 @@ export default () => {
             />
             <input type="number" className="add__value" placeholder="Value" />
             <button className="add__btn">
-              <i className="ion-ios-checkmark-outline"></i>
+              <i className="ion-ios-checkmark-outline">s</i>
             </button>
           </div>
         </div>
