@@ -13,6 +13,8 @@ Updating in Js.tsx series in routes(Js1,Js2 ......)
 
 src/routes
 
+# legacy (1~6)
+
 1. Js1 = loop
 2. Js2 = GEC,EC,Hoisting,scope-chain, and This
 
@@ -22,4 +24,6 @@ src/routes
 5. Js5 = IIFE, Closure, Object.call(),bind(),apply()
 6. Js6 = Practice the concept of Js5 (IIFE,Closure);
 
-7. Js7 = Budget calculator project
+# from es6 (7~)
+
+7. Js7 = the issue of "this"
