@@ -27,3 +27,4 @@ src/routes
 # from es6 (7~)
 
 7. Js7 = the issue of "this"
+8. JS8 = ES6 updates
