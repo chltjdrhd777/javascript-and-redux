@@ -9,6 +9,7 @@ import Js5 from "./routes/past/Js5";
 import Js6 from "./routes/past/Js6";
 import Js7 from "./routes/Js7";
 import Js8 from "./routes/Js8";
+import Js9 from "./routes/Js9";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
       <Route exact path="/js6" component={Js6} />
       <Route exact path="/js7" component={Js7} />
       <Route exact path="/js8" component={Js8} />
+      <Route exact path="/js9" component={Js9} />
     </Router>
   );
 }

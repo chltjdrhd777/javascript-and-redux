@@ -78,14 +78,17 @@ export default () => {
   console.log(sum1); //6
 
   ////////?ES6/////////////////////////////////////////
-  const materials2: [number, number, number] = [5, 6, 7];
-  const sum2 = addAllNumbers(...materials2); //? ...materials = {0:5, 1:6, 2:7}
-  console.log(sum2); //18
-
   const family1 = ["man1", "woman1"];
   const family2 = ["man2", "woman2"];
   const join = [...family1, ...family2];
   console.log(join); // ['man1','woman1','man2','woman2'];
+
+  const family33 = { 0: "man3", 1: "woman3" };
+  const family4 = { 2: "man4", 3: "woman4" };
+  const join2 = { ...family33, ...family4 };
+  console.log(join2); // {0:'man3', 1:'woman3', 2:'man4' 3:'woman4'}
+  //! if there is the same key name, it's value is overrapped
+
   //? just think that spread(...) is like discharging all information into the target container
 
   //////////////! Array.from(target array) ///////////////////////
@@ -93,7 +96,17 @@ export default () => {
   const answer = Array.from(family3).findIndex((every: number) => every === 3);
   console.log(answer); //2
 
-  //!
+  //////////////! Rest parameter///////////////////////////
+  //? arguments = is an array which has numbering keys <--- so, it cannot use like map(), splice()... which can be used in an array
+  //! the reason arguments object can be used like array is it has numbering key
+  //! like arguments[0], arguments[1]......
 
+  //? rest parameters = stored as an array. it can be set only behind the arguments
+  //! rest prarmeters can only be deployed behind the other arguments
+  function counting(a: string, b: string, ...numbers: number[]) {
+    console.log(a, b, numbers);
+  }
+
+  counting("a", "b", 1, 2, 3, 4, 5); // 'a', 'b', [1,2,3,4,5]
   return <div></div>;
 };
