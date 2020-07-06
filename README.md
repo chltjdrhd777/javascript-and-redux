@@ -29,3 +29,4 @@ src/routes
 7. Js7 = the issue of "this"
 8. JS8 = ES6 updates (1) /// destructing(const[a,b]=array), spread(...obj, ...array), rest parameter
 9. JS9 = Es6 updates (2) Map(), class
+10. JS10 = Practice coding challenge
