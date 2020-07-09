@@ -24,3 +24,7 @@ src/routes
 11. Js 11 = Asynchronous, Promises, Async and await, axios
 
 12. final project
+    //BABEL(transcompiler)
+    = allows our latest codes like ES 6~~~~ to be compatible with down versions
+    //webpack(bundler)
+    = by interacting BABEL, it gathers all other numerous types of files like png,sass,js.... => and return one bundle file
