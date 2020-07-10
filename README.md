@@ -28,3 +28,5 @@ src/routes
     = allows our latest codes like ES 6~~~~ to be compatible with down versions
     //webpack(bundler)
     = by interacting BABEL, it gathers all other numerous types of files like png,sass,js.... => and return one bundle file
+
+[^1] at first, I was gonna use SCSS, but in react project, my body styling affected other tsx files. So, I return to styled components again( for react, I think, it is the most useful way to style my project)

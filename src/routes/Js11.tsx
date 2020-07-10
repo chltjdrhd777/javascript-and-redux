@@ -1,5 +1,6 @@
 import React from "react";
 import axios from "axios";
+import styled from "styled-components";
 
 export default () => {
   //?javascript concept
@@ -179,5 +180,12 @@ export default () => {
 
   ////////////////! by using async and await
 
-  return <div></div>;
+  const Hey = styled.div`
+    background: blue;
+  `;
+  return (
+    <div>
+      <Hey>hi</Hey>
+    </div>
+  );
 };
