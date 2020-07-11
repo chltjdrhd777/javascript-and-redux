@@ -21,6 +21,23 @@ export default () => {
           <span>Search</span>
         </SearchButton>
       </Form>
+
+      {/* NOTE!!!  if you want to refer to other components, you must make sure that each relationship is father-child component*/}
+      {/*"visibility:hidden" = there is still space just can't seen, "display:none" = space is also removed*/}
+      <Likes>
+        <LikesField>
+          <LikesIcon
+            xmlns="http://www.w3.org/2000/svg"
+            xmlnsXlink="http://www.w3.org/1999/xlink"
+          >
+            <use xlinkHref={`${icons}#icon-heart`}></use>
+          </LikesIcon>
+        </LikesField>
+
+        <LikesPanel>
+          <LikesList>hi</LikesList>
+        </LikesPanel>
+      </Likes>
     </Header>
   );
 };
@@ -97,3 +114,48 @@ const Icons = styled.svg<IconProps>`
   width: 2rem;
   fill: white;
 `;
+
+//align-self : how to modulate each component in the grid sector
+//note : align-self only affects the target component
+
+//align-self : center, strech, start, end ....
+const Likes = styled.div`
+  position: relative;
+  align-self: stretch;
+  padding: 0;
+  transition: all 0.3s;
+  &:hover {
+    background-color: #f2efee;
+  }
+`;
+const LikesField = styled.div`
+  cursor: pointer;
+  padding: 0 4rem;
+  display: flex;
+  align-items: center;
+  height: 100%;
+`;
+const LikesPanel = styled.div`
+  visibility: hidden;
+  opacity: 0;
+  position: absolute;
+  right: 0;
+  top: 10rem;
+  z-index: 10;
+  padding: 2rem 0;
+  width: 30rem;
+  background-color: #fff;
+  box-shadow: 0 0.8rem 5rem 2rem rgba(101, 90, 86, 0.1);
+  transition: all 0.3s;
+  ${Likes}:hover & {
+    visibility: visible;
+    opacity: 1;
+  }
+`;
+const LikesIcon = styled.svg`
+  fill: #f59a83;
+  height: 3.5rem;
+  width: 3.5rem;
+`;
+
+const LikesList = styled.ul``;
