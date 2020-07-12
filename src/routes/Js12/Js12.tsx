@@ -1,6 +1,9 @@
 import React from "react";
 import styled, { createGlobalStyle } from "styled-components/macro";
 import Header from "./components/Header";
+import ResultList from "./components/ResultList";
+import RecipeSection from "./components/Recipe";
+import ShoppingSection from "./components/Shopping";
 
 export default () => {
   return (
@@ -8,10 +11,14 @@ export default () => {
       <GlobalCSS />
       <Container>
         <Header />
+        <ResultList />
+        <RecipeSection />
+        <ShoppingSection />
       </Container>
     </>
   );
 };
+
 //////////!  BEHOLD ////////////////////
 //? when you want to use styled components, and distribute each part into parent component,
 //? it's definition (like const name = styled.div``) should be in the file

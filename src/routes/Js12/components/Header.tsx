@@ -2,8 +2,17 @@ import React from "react";
 import styled from "styled-components/macro";
 import logo from "../img/logo.png";
 import icons from "../img/icons.svg";
+import axios from "axios";
 
 export default () => {
+  async function getResults() {
+    const res = await axios(
+      `https://forkify-api.herokuapp.com/api/search?q=pizza`
+    );
+    console.log(res);
+  }
+  getResults();
+
   return (
     <Header>
       <Logo src={logo} />
@@ -158,4 +167,6 @@ const LikesIcon = styled.svg`
   width: 3.5rem;
 `;
 
-const LikesList = styled.ul``;
+const LikesList = styled.ul`
+  list-style: none;
+`;

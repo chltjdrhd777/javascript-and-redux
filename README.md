@@ -28,5 +28,39 @@ src/routes
     = allows our latest codes like ES 6~~~~ to be compatible with down versions
     //webpack(bundler)
     = by interacting BABEL, it gathers all other numerous types of files like png,sass,js.... => and return one bundle file
+    it's structure is like
+
+    <webpack.config.js>
+    const path = require('path'); <--- for absolute route calling
+    module.exports = {
+
+    entry : './src/......' <--- where is the target js file comming from?
+
+    output : {
+    path: path.resolve(\_\_dirname, 'dist') <----- where is the target index.html to open on the local web server
+
+    filename : 'filename.js' //if you use webpack-dev-server, don't have to set this. it is only for when you make the bunlder.js file by through webpack
+    }
+
+    devServer:{
+    contentBase : './dist'
+    }
+
+    }
+
+    <package.json>
+    {
+    .
+    .
+    .
+    "script" :{
+
+    "devname" : "webpack --mode development" <--- for development (npm devname)
+
+    "buildname" : "webpack --mode production" <--- for production <---- version to compress and reduce the file memory
+
+    "start" : "webpack-dev-server --mode development --open <--- start webpack server, and immediately open the page in the local web server
+    }
+    }
 
 [^1] at first, I was gonna use SCSS, but in react project, my body styling affected other tsx files. So, I return to styled components again( for react, I think, it is the most useful way to style my project)
