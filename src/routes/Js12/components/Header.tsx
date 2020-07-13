@@ -1,23 +1,33 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components/macro";
 import logo from "../img/logo.png";
 import icons from "../img/icons.svg";
-import axios from "axios";
+import Search from "../Search";
 
 export default () => {
-  async function getResults() {
-    const res = await axios(
-      `https://forkify-api.herokuapp.com/api/search?q=pizza`
-    );
-    console.log(res);
-  }
-  getResults();
+  const [state, setState] = useState({ value: "", result: [] });
+  const handleChange = (e: any) => {
+    setState({ ...state, value: e.target.value });
+  };
+
+  const summitted = async (e: any) => {
+    e.preventDefault();
+    const result = new Search(state.value);
+    await result.getResults();
+    setState({ value: "", result: result.result });
+  };
+  console.log(state);
 
   return (
     <Header>
       <Logo src={logo} />
-      <Form>
-        <SearchBar type="text" placeholder="Search your recipes" />
+      <Form onSubmit={summitted}>
+        <SearchBar
+          type="text"
+          value={state.value}
+          onChange={handleChange}
+          placeholder="Search your recipes"
+        />
         <SearchButton>
           {/* //PLEASE REMEMBER// it is the way how to import svg REALLY
           SUCxxxxxxxxxxxxxxx */}
