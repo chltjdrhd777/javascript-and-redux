@@ -1,36 +1,69 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components/macro";
 import logo from "../img/logo.png";
 import icons from "../img/icons.svg";
-import Search from "../Search";
 
-export default () => {
-  const [state, setState] = useState({ value: "", result: [] });
+import { connect } from "react-redux";
+import { State } from "../ReduxStore";
+import axios from "axios";
+
+async function getAPI(query: string) {
+  const res = await axios.get(
+    `https://forkify-api.herokuapp.com/api/search?q=${query}`
+  );
+  return res.data.recipes;
+}
+
+function header({ state, textChange, textSubmitted }) {
+  const sendSearchValue = (e: any) => {
+    e.preventDefault();
+    if (state.value === "") {
+      alert("input something");
+    } else {
+      //! behold. getAPI is asynchronous
+      getAPI(state.value).then((res) => textSubmitted(res));
+      textChange("");
+    }
+  };
+
+  ///////previous mistacke//////////////////
+  /* const [state, setState] = useState({ value: "", result: [] });
   const handleChange = (e: any) => {
     setState({ ...state, value: e.target.value });
   };
 
+  //! NOTE//
+  //? If you don't put "await" infront of the result.getResults()
+  //? you would see that your "console.log" shows empty array because, it is asynchronous function so that console.log(state) is runned befor we get axios information
+
+  //? "await" is like = "hey, you should wait for processing this like synchronous function"
+  //? "async" is like = "hey, this function's EC is all asynchronous."
   const summitted = async (e: any) => {
     e.preventDefault();
     const result = new Search(state.value);
     await result.getResults();
     setState({ value: "", result: result.result });
   };
-  console.log(state);
+  console.log(state); */
+  ////////////////////////////////////////////////
+
+  //! you know what?
+  //? I figured out this way was worse because I have to suffer from dealing with state in the other module.
+  //? to avoid this fuxx shit, I am gonna use "redux"
 
   return (
     <Header>
       <Logo src={logo} />
-      <Form onSubmit={summitted}>
+      <Form onSubmit={sendSearchValue}>
         <SearchBar
           type="text"
           value={state.value}
-          onChange={handleChange}
+          onChange={(e) => {
+            textChange(e.target.value);
+          }}
           placeholder="Search your recipes"
         />
         <SearchButton>
-          {/* //PLEASE REMEMBER// it is the way how to import svg REALLY
-          SUCxxxxxxxxxxxxxxx */}
           <Icons
             xmlns="http://www.w3.org/2000/svg"
             xmlnsXlink="http://www.w3.org/1999/xlink"
@@ -41,8 +74,6 @@ export default () => {
         </SearchButton>
       </Form>
 
-      {/* NOTE!!!  if you want to refer to other components, you must make sure that each relationship is father-child component*/}
-      {/*"visibility:hidden" = there is still space just can't seen, "display:none" = space is also removed*/}
       <Likes>
         <LikesField>
           <LikesIcon
@@ -59,7 +90,27 @@ export default () => {
       </Likes>
     </Header>
   );
-};
+}
+
+//////? redux part //////
+function mapStateToProps(state: State) {
+  return { state };
+}
+
+function mapDispatchToProps(dispatch: any) {
+  return {
+    textChange: (typing: string) => {
+      dispatch({ type: "searchList", typing });
+    },
+    textSubmitted: (result: any) => {
+      dispatch({ type: "submitted", submittedResult: result });
+    },
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(header);
+
+//? styled component////
 
 const Header = styled.header`
   grid-area: head;
