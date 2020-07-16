@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components/macro";
 import { connect } from "react-redux";
 import { State } from "../ReduxStore";
+import icons from "../img/icons.svg";
 
 //I changed the previous code with a much easier way.
 function textSplit(text: string) {
@@ -14,27 +15,70 @@ function textSplit(text: string) {
 
 function resultList({ state }) {
   const { result } = state;
-  console.log(result);
+
+  const newArray: any[] = [];
+  for (let i = 0; i < Math.floor(result.length / 7 + 1); i++) {
+    const slicing = result.slice(i * 7, (i + 1) * 7);
+    if (slicing.length <= 7 && slicing.length > 0) {
+      newArray.push(slicing);
+    }
+  }
+
+  console.log(newArray);
 
   return (
     <Result>
-      <ResultList>
-        {result.map((each: any) => (
-          <li key={each.recipe_id}>
-            <ResultLink href={`#${each.recipe_id}`}>
-              <Figure>
-                <img src={each.image_url} alt="" />
-              </Figure>
+      {state.loading ? (
+        <NowLoading>
+          <LoadingSVG
+            xmlns="http://www.w3.org/2000/svg"
+            xmlnsXlink="http://www.w3.org/1999/xlink"
+          >
+            <use xlinkHref={`${icons}#icon-cw`} />
+          </LoadingSVG>
+        </NowLoading>
+      ) : null}
 
-              <ResultData>
-                <ResultName>{textSplit(each.title)}</ResultName>
-                <ResultAuthor>{each.publisher}</ResultAuthor>
-              </ResultData>
-            </ResultLink>
-          </li>
-        ))}
-      </ResultList>
-      <ResultPage></ResultPage>
+      {newArray.length > 0 ? (
+        <>
+          <ResultList>
+            {newArray[0].map((each: any) => (
+              <li key={each.recipe_id}>
+                <ResultLink href={`#${each.recipe_id}`}>
+                  <Figure>
+                    <img src={each.image_url} alt="" />
+                  </Figure>
+
+                  <ResultData>
+                    <ResultName>{textSplit(each.title)}</ResultName>
+                    <ResultAuthor>{each.publisher}</ResultAuthor>
+                  </ResultData>
+                </ResultLink>
+              </li>
+            ))}
+          </ResultList>
+
+          <ChangePage>
+            <Prev>
+              <ButtonIcon
+                xmlns="http://www.w3.org/2000/svg"
+                xmlnsXlink="http://www.w3.org/1999/xlink"
+              >
+                <use xlinkHref={`${icons}#icon-triangle-left`} />
+              </ButtonIcon>
+            </Prev>
+
+            <Next>
+              <ButtonIcon
+                xmlns="http://www.w3.org/2000/svg"
+                xmlnsXlink="http://www.w3.org/1999/xlink"
+              >
+                <use xlinkHref={`${icons}#icon-triangle-right`} />
+              </ButtonIcon>
+            </Next>
+          </ChangePage>
+        </>
+      ) : null}
     </Result>
   );
 }
@@ -48,13 +92,33 @@ export default connect(mapStateToProps)(resultList);
 
 //////? styled component ////////
 
+const NowLoading = styled.div`
+  margin: 5rem auto;
+  text-align: center;
+`;
+const LoadingSVG = styled.svg`
+  @keyframes rotateThis {
+    0% {
+      transform: rotate(0);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  height: 5.5rem;
+  width: 5.5rem;
+  fill: #f59a83;
+  transform-origin: 45% 50%;
+  animation: rotateThis 1.5s infinite linear;
+`;
+
 const Result = styled.div`
   padding: 3rem 0;
 `;
 const ResultList = styled.ul`
   list-style: none;
 `;
-const ResultPage = styled.div`
+const ChangePage = styled.div`
   margin-top: 3rem;
   padding: 0 3rem;
   &:after {
@@ -121,3 +185,7 @@ const ResultAuthor = styled.p`
   text-transform: uppercase;
   font-weight: 600;
 `;
+
+const Prev = styled.button``;
+const ButtonIcon = styled.svg``;
+const Next = styled(Prev)``;

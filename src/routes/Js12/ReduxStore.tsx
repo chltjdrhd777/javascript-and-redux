@@ -2,24 +2,31 @@ import { createStore } from "redux";
 
 export interface State {
   value: string;
-  result: [] | Promise<any>;
+  result: any[];
+  loading: boolean;
 }
 
 export interface ActionDef {
-  type: "searchList" | "submitted";
+  type: "searchList" | "submitted" | "nowLoading";
   typing: string;
   submittedResult: any;
 }
 
 const reducer = (
-  state: State = { value: "", result: [] },
+  state: State = {
+    value: "",
+    result: [],
+    loading: false,
+  },
   action: ActionDef
 ) => {
   switch (action.type) {
     case "searchList":
       return { ...state, value: action.typing };
     case "submitted":
-      return { ...state, result: action.submittedResult };
+      return { ...state, result: action.submittedResult, loading: false };
+    case "nowLoading":
+      return { ...state, loading: true };
     default:
       return state;
   }

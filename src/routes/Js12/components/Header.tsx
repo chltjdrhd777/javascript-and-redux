@@ -7,6 +7,10 @@ import { connect } from "react-redux";
 import { State } from "../ReduxStore";
 import axios from "axios";
 
+export const statuo = {
+  test: "hello",
+};
+
 async function getAPI(query: string) {
   const res = await axios.get(
     `https://forkify-api.herokuapp.com/api/search?q=${query}`
@@ -14,17 +18,20 @@ async function getAPI(query: string) {
   return res.data.recipes;
 }
 
-function header({ state, textChange, textSubmitted }) {
+function header({ state, textChange, textSubmitted, nowLoading }) {
   const sendSearchValue = (e: any) => {
     e.preventDefault();
     if (state.value === "") {
       alert("input something");
     } else {
-      //! behold. getAPI is asynchronous
+      //! Behold. getAPI is asynchronous
+      //! Whenever you make codes, take into account that getAPI() returns value later.
+      nowLoading();
       getAPI(state.value).then((res) => textSubmitted(res));
       textChange("");
     }
   };
+  console.log(state);
 
   ///////previous mistacke//////////////////
   /* const [state, setState] = useState({ value: "", result: [] });
@@ -104,6 +111,9 @@ function mapDispatchToProps(dispatch: any) {
     },
     textSubmitted: (result: any) => {
       dispatch({ type: "submitted", submittedResult: result });
+    },
+    nowLoading: () => {
+      dispatch({ type: "nowLoading" });
     },
   };
 }
