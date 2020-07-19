@@ -86,7 +86,6 @@ vmax = more larger units ''
 }`;
 
 const Container = styled.div`
-  height: 700px;
   max-width: 120rem;
   margin: 4vw auto;
   background-color: #fff;

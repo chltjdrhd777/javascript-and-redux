@@ -1,8 +1,8 @@
 import React from "react";
 import styled from "styled-components/macro";
 import { connect } from "react-redux";
-import { State } from "../ReduxStore";
 import icons from "../img/icons.svg";
+import axios from "axios";
 
 //I changed the previous code with a much easier way.
 function textSplit(text: string) {
@@ -13,38 +13,71 @@ function textSplit(text: string) {
   return text;
 }
 
-function resultList({ state }) {
-  const { result } = state;
+export function LoadingBarCreator() {
+  return (
+    <NowLoading>
+      <LoadingSVG
+        xmlns="http://www.w3.org/2000/svg"
+        xmlnsXlink="http://www.w3.org/1999/xlink"
+      >
+        <use xlinkHref={`${icons}#icon-cw`} />
+      </LoadingSVG>
+    </NowLoading>
+  );
+}
 
-  const newArray: any[] = [];
-  for (let i = 0; i < Math.floor(result.length / 7 + 1); i++) {
-    const slicing = result.slice(i * 7, (i + 1) * 7);
-    if (slicing.length <= 7 && slicing.length > 0) {
-      newArray.push(slicing);
+function resultList({
+  state,
+  incre,
+  decre,
+  sendRecipeInfo,
+  makeRecipeLoading,
+}) {
+  const {
+    resultPage: { presentPage, totalPage },
+  } = state.reducer;
+
+  const decrease = () => {
+    if (presentPage > 0) {
+      decre();
+    }
+  };
+
+  const increase = () => {
+    if (totalPage.length - 1 > presentPage) {
+      incre();
+    }
+  };
+
+  async function getRecipe(id: string) {
+    try {
+      makeRecipeLoading();
+      const res = await axios.get(
+        `https://forkify-api.herokuapp.com/api/get?rId=${id}`
+      );
+      sendRecipeInfo(res.data.recipe);
+      makeRecipeLoading();
+    } catch (error) {
+      console.log(error);
     }
   }
 
-  console.log(newArray);
-
   return (
     <Result>
-      {state.loading ? (
-        <NowLoading>
-          <LoadingSVG
-            xmlns="http://www.w3.org/2000/svg"
-            xmlnsXlink="http://www.w3.org/1999/xlink"
-          >
-            <use xlinkHref={`${icons}#icon-cw`} />
-          </LoadingSVG>
-        </NowLoading>
-      ) : null}
+      {state.reducer.loading ? <LoadingBarCreator /> : null}
 
-      {newArray.length > 0 ? (
+      {totalPage.length > 0 ? (
         <>
           <ResultList>
-            {newArray[0].map((each: any) => (
+            {totalPage[presentPage].map((each: any) => (
               <li key={each.recipe_id}>
-                <ResultLink href={`#${each.recipe_id}`}>
+                <ResultLink
+                  href={`#${each.recipe_id}`}
+                  onClick={(e: any) => {
+                    e.preventDefault();
+                    getRecipe(each.recipe_id);
+                  }}
+                >
                   <Figure>
                     <img src={each.image_url} alt="" />
                   </Figure>
@@ -59,23 +92,27 @@ function resultList({ state }) {
           </ResultList>
 
           <ChangePage>
-            <Prev>
-              <ButtonIcon
-                xmlns="http://www.w3.org/2000/svg"
-                xmlnsXlink="http://www.w3.org/1999/xlink"
-              >
-                <use xlinkHref={`${icons}#icon-triangle-left`} />
-              </ButtonIcon>
-            </Prev>
+            {presentPage === 0 || totalPage.length === 1 ? null : (
+              <Prev onClick={decrease}>
+                <ButtonIcon
+                  xmlns="http://www.w3.org/2000/svg"
+                  xmlnsXlink="http://www.w3.org/1999/xlink"
+                >
+                  <use xlinkHref={`${icons}#icon-triangle-left`} />
+                </ButtonIcon>
+              </Prev>
+            )}
 
-            <Next>
-              <ButtonIcon
-                xmlns="http://www.w3.org/2000/svg"
-                xmlnsXlink="http://www.w3.org/1999/xlink"
-              >
-                <use xlinkHref={`${icons}#icon-triangle-right`} />
-              </ButtonIcon>
-            </Next>
+            {totalPage.length - 1 === presentPage ? null : (
+              <Next onClick={increase}>
+                <ButtonIcon
+                  xmlns="http://www.w3.org/2000/svg"
+                  xmlnsXlink="http://www.w3.org/1999/xlink"
+                >
+                  <use xlinkHref={`${icons}#icon-triangle-right`} />
+                </ButtonIcon>
+              </Next>
+            )}
           </ChangePage>
         </>
       ) : null}
@@ -84,11 +121,28 @@ function resultList({ state }) {
 }
 
 ///Finally, I can use "state" from redux. it is cooler than I use the isolated useState.
-function mapStateToProps(state: State) {
+function mapStateToProps(state: any) {
   return { state };
 }
 
-export default connect(mapStateToProps)(resultList);
+function mapDispatchToProps(dispatch: any) {
+  return {
+    incre: () => {
+      dispatch({ type: "increasePage" });
+    },
+    decre: () => {
+      dispatch({ type: "decreasePage" });
+    },
+    sendRecipeInfo: (resultRecipeAray: {}) => {
+      dispatch({ type: "addRecipes", resultRecipeAray });
+    },
+    makeRecipeLoading: () => {
+      dispatch({ type: "recipeLoading" });
+    },
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(resultList);
 
 //////? styled component ////////
 
@@ -117,15 +171,7 @@ const Result = styled.div`
 `;
 const ResultList = styled.ul`
   list-style: none;
-`;
-const ChangePage = styled.div`
-  margin-top: 3rem;
-  padding: 0 3rem;
-  &:after {
-    content: "";
-    display: table;
-    clear: both;
-  }
+  height: 700px;
 `;
 
 const ResultLink = styled.a`
@@ -186,6 +232,40 @@ const ResultAuthor = styled.p`
   font-weight: 600;
 `;
 
-const Prev = styled.button``;
-const ButtonIcon = styled.svg``;
-const Next = styled(Prev)``;
+const ChangePage = styled.div`
+  width: 100%;
+  margin-top: 3rem;
+  padding: 0 3rem;
+  &:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+`;
+
+const Prev = styled.button`
+  fill: #f59a83;
+  font-size: 1.2rem;
+  border: none;
+  background: #f9f5f3;
+  padding: 0.8rem 1.2rem;
+  border-radius: 10px;
+  cursor: pointer;
+  float: left;
+  transition: all 0.2s;
+  &:hover {
+    color: #f48982;
+    background: #f2efee;
+  }
+  &:focus {
+    outline: none;
+  }
+`;
+
+const ButtonIcon = styled.svg`
+  width: 2rem;
+  height: 2rem;
+`;
+const Next = styled(Prev)`
+  float: right;
+`;

@@ -4,7 +4,7 @@ import logo from "../img/logo.png";
 import icons from "../img/icons.svg";
 
 import { connect } from "react-redux";
-import { State } from "../ReduxStore";
+import { State } from "../SearchStore";
 import axios from "axios";
 
 export const statuo = {
@@ -12,26 +12,29 @@ export const statuo = {
 };
 
 async function getAPI(query: string) {
-  const res = await axios.get(
-    `https://forkify-api.herokuapp.com/api/search?q=${query}`
-  );
-  return res.data.recipes;
+  try {
+    const res = await axios.get(
+      `https://forkify-api.herokuapp.com/api/search?q=${query}`
+    );
+    return res.data.recipes;
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 function header({ state, textChange, textSubmitted, nowLoading }) {
   const sendSearchValue = (e: any) => {
     e.preventDefault();
-    if (state.value === "") {
+    if (state.reducer.value === "") {
       alert("input something");
     } else {
       //! Behold. getAPI is asynchronous
       //! Whenever you make codes, take into account that getAPI() returns value later.
       nowLoading();
-      getAPI(state.value).then((res) => textSubmitted(res));
+      getAPI(state.reducer.value).then((res) => textSubmitted(res));
       textChange("");
     }
   };
-  console.log(state);
 
   ///////previous mistacke//////////////////
   /* const [state, setState] = useState({ value: "", result: [] });
@@ -64,7 +67,7 @@ function header({ state, textChange, textSubmitted, nowLoading }) {
       <Form onSubmit={sendSearchValue}>
         <SearchBar
           type="text"
-          value={state.value}
+          value={state.reducer.value}
           onChange={(e) => {
             textChange(e.target.value);
           }}
