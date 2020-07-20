@@ -5,7 +5,7 @@ export interface RecipeState {
 
 export interface RecipeAction {
   type: "addRecipes" | "recipeLoading";
-  resultRecipeAray: {};
+  resultRecipeObj: any;
   loadingCheck: boolean;
 }
 
@@ -15,7 +15,36 @@ export default function recipesInfo(
 ) {
   switch (action.type) {
     case "addRecipes":
-      return { ...state, recipesData: action.resultRecipeAray };
+      const prevUnit = [
+        "tablespoons",
+        "tablespoon",
+        "ounces",
+        "ounce",
+        "teaspoons",
+        "teaspoon",
+        "cups",
+        "pounds",
+      ];
+      const changedUnit = [
+        "tbsp",
+        "tbsp",
+        "oz",
+        "oz",
+        "tsp",
+        "tsp",
+        "cup",
+        "pound",
+      ];
+      const newArray = action.resultRecipeObj.ingredients.map((el: string) => {
+        let ingredient = el.toLowerCase();
+        prevUnit.forEach((value, index) => {
+          ingredient = ingredient
+            .replace(value, changedUnit[index])
+            .replace(/ *\([^)]*\) */g, " ");
+        });
+        return ingredient;
+      });
+      return { ...state, recipesData: newArray };
     case "recipeLoading":
       return { ...state, loading: !state.loading };
     default:

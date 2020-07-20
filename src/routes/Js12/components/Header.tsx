@@ -7,10 +7,6 @@ import { connect } from "react-redux";
 import { State } from "../SearchStore";
 import axios from "axios";
 
-export const statuo = {
-  test: "hello",
-};
-
 async function getAPI(query: string) {
   try {
     const res = await axios.get(
@@ -36,6 +32,15 @@ function header({ state, textChange, textSubmitted, nowLoading }) {
     }
   };
 
+  //! don't want to type "pizza" redundantly
+  const test = (e: any) => {
+    e.preventDefault();
+    nowLoading();
+    getAPI("pizza").then((res) => textSubmitted(res));
+    textChange("");
+  };
+  window.addEventListener("load", (e) => test(e));
+  ////////////! //////////////////////////////////////////////
   ///////previous mistacke//////////////////
   /* const [state, setState] = useState({ value: "", result: [] });
   const handleChange = (e: any) => {

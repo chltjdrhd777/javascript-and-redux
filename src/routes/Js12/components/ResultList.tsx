@@ -133,8 +133,8 @@ function mapDispatchToProps(dispatch: any) {
     decre: () => {
       dispatch({ type: "decreasePage" });
     },
-    sendRecipeInfo: (resultRecipeAray: {}) => {
-      dispatch({ type: "addRecipes", resultRecipeAray });
+    sendRecipeInfo: (resultRecipeObj: {}) => {
+      dispatch({ type: "addRecipes", resultRecipeObj });
     },
     makeRecipeLoading: () => {
       dispatch({ type: "recipeLoading" });
