@@ -1,5 +1,6 @@
 export interface RecipeState {
-  recipesData: {};
+  recipeOriginal: {};
+  recipesData: [];
   loading: boolean;
 }
 
@@ -10,7 +11,7 @@ export interface RecipeAction {
 }
 
 export default function recipesInfo(
-  state: RecipeState = { recipesData: {}, loading: false },
+  state: RecipeState = { recipeOriginal: {}, recipesData: [], loading: false },
   action: RecipeAction
 ) {
   switch (action.type) {
@@ -124,7 +125,11 @@ export default function recipesInfo(
 
         return finalReturnValue;
       });
-      return { ...state, recipesData: newArray };
+      return {
+        ...state,
+        recipeOriginal: action.resultRecipeObj,
+        recipesData: newArray,
+      };
     case "recipeLoading":
       return { ...state, loading: !state.loading };
     default:
