@@ -171,7 +171,7 @@ const Result = styled.div`
 `;
 const ResultList = styled.ul`
   list-style: none;
-  height: 700px;
+  height: 500px;
 `;
 
 const ResultLink = styled.a`
