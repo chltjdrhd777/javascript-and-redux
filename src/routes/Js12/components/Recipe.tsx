@@ -6,7 +6,12 @@ import icons from "../img/icons.svg";
 
 function recipe({ state }) {
   const { loading, recipesData } = state.recipesInfo;
-  const { image_url, title } = state.recipesInfo.recipeOriginal;
+  const {
+    image_url,
+    title,
+    publisher,
+    source_url,
+  } = state.recipesInfo.recipeOriginal;
   console.log(state);
 
   return (
@@ -78,19 +83,22 @@ function recipe({ state }) {
     return (
       <ListContainer>
         <ListUl>
-          <ItemLi>
-            <svg>
-              <use xlinkHref={`${icons}#icon-check`}></use>
-            </svg>
+          {recipesData.map((el: any) => (
+            <ItemLi key={recipesData.indexOf(el)}>
+              <CheckSVG>
+                <svg>
+                  <use xlinkHref={`${icons}#icon-check`}></use>
+                </svg>
+              </CheckSVG>
 
-            <Count>1000</Count>
-            <Unit>salt</Unit>
-            <Ingredient>
-              brbrbrbrbwewrqwerqwerqwerweqrqasdfasdfsadfewqfewqfdasfqwef
-            </Ingredient>
-          </ItemLi>
+              <Count>{el.count}</Count>
+              <Ingredient>
+                <Unit>{el.unit}</Unit>
+                {el.ingredient}
+              </Ingredient>
+            </ItemLi>
+          ))}
         </ListUl>
-
         <SendDataToShoppingButton>
           <svg>
             <use xlinkHref={`${icons}#icon-shopping-cart`}></use>
@@ -101,11 +109,11 @@ function recipe({ state }) {
         <ReferencePart>
           <Heading>How to cook it</Heading>
           <Paragraph>
-            Try this by yourself. this recipe is designed by
-            <Author>"ME"</Author>. please check out the website.
+            Try this by yourself. this recipe is designed by{" "}
+            <Author>{publisher}</Author>. please check out the website.
           </Paragraph>
         </ReferencePart>
-        <ReferenceLink>
+        <ReferenceLink href={source_url} target={"_blank"}>
           <span>Directions</span>
           <svg>
             <use xlinkHref={`${icons}#icon-triangle-right`}></use>
@@ -123,9 +131,24 @@ function mapStateToProps(state: any) {
 
 export default connect(mapStateToProps)(recipe);
 
+const ServingButtonPart = styled.div`
+  display: flex;
+  align-items: center;
+  margin-left: 1.5rem;
+  width: 40px;
+  justify-content: space-between;
+  opacity: 0;
+  transition: opacity 0.5s;
+`;
+
 const Recipe = styled.div`
   background: #f9f5f3;
   border-top: 1px solid #fff;
+  &:hover {
+    ${ServingButtonPart} {
+      opacity: 1;
+    }
+  }
 `;
 
 const Figure = styled.figure`
@@ -200,13 +223,7 @@ const ServingSVG = styled(TimerSVG)`
 `;
 const ServingInfo = styled(TimingInfo)``;
 const ServingText = styled(TimingText)``;
-const ServingButtonPart = styled.div`
-  display: flex;
-  align-items: center;
-  margin-left: 1.5rem;
-  width: 40px;
-  justify-content: space-between;
-`;
+
 const Plus = styled.button`
   height: 1.75rem;
   width: 1.75rem;
@@ -276,13 +293,12 @@ const ListUl = styled.ul`
   list-style: none;
   margin-bottom: 3rem;
 `;
+
 const ItemLi = styled.li`
   display: flex;
-  justify-content: center;
-  align-items: center;
   & svg {
-    height: 1.8rem;
-    width: 1.8rem;
+    height: 1.6rem;
+    width: 1.6rem;
     fill: #f59a83;
     border: 1px solid #f59a83;
     border-radius: 50%;
@@ -290,16 +306,18 @@ const ItemLi = styled.li`
     margin-right: 1rem;
   }
 `;
+const CheckSVG = styled.div`
+  width: 2rem;
+  height: 2rem;
+`;
 
 const Count = styled.div`
   margin-right: 0.5rem;
 `;
-const Unit = styled.div`
+const Unit = styled.span`
   margin-right: 0.5rem;
 `;
-const Ingredient = styled.div`
-  word-break: normal;
-`;
+const Ingredient = styled.div``;
 
 const SendDataToShoppingButton = styled.button`
   padding: 1.3rem 3rem;
@@ -327,8 +345,33 @@ const SendDataToShoppingButton = styled.button`
   }
 `;
 
-const ReferencePart = styled.div``;
-const Heading = styled.h2``;
-const Paragraph = styled.p``;
-const Author = styled.span``;
-const ReferenceLink = styled.a``;
+const ReferencePart = styled.div`
+  padding: 4rem;
+  padding-bottom: 5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+const Heading = styled.h2`
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #f59a83;
+  text-transform: uppercase;
+  margin-bottom: 2.5rem;
+  text-align: center;
+  transform: skewY(-3deg);
+`;
+const Paragraph = styled.p`
+  font-size: 1.5rem;
+  text-align: center;
+  width: 90%;
+  margin-bottom: 3rem;
+  color: #968b87;
+`;
+const Author = styled.span`
+  font-weight: 700;
+`;
+
+const ReferenceLink = styled(SendDataToShoppingButton.withComponent("a"))`
+  text-decoration: none;
+`;

@@ -110,7 +110,7 @@ function fuxxingChaosUnit(state: RecipeState, action: RecipeAction) {
         finalReturnValue = {
           count: parseInt(spliting[0]),
           unit: spliting[1],
-          ingredeint: spliting.slice(2).join(" "),
+          ingredient: spliting.slice(2).join(" "),
         };
       } else {
         //? case4
