@@ -4,8 +4,9 @@ import { LoadingBarCreator } from "./ResultList";
 import { connect } from "react-redux";
 import icons from "../img/icons.svg";
 
-function recipe({ state }) {
+function recipe({ state, changeServingAmount }) {
   const { loading, recipesData } = state.recipesInfo;
+  const { servingAmount, updatedArr } = state.recipesInfo.serving;
   const {
     image_url,
     title,
@@ -45,7 +46,7 @@ function recipe({ state }) {
           <TimerSVG>
             <use xlinkHref={`${icons}#icon-stopwatch`}></use>
           </TimerSVG>
-          <TimingInfo>{recipeTimeCal(recipesData)}</TimingInfo>
+          <TimingInfo>{recipeTimeCal(recipesData) * servingAmount}</TimingInfo>
           <TimingText>minutes</TimingText>
         </Minutes>
 
@@ -53,16 +54,16 @@ function recipe({ state }) {
           <ServingSVG>
             <use xlinkHref={`${icons}#icon-man`}></use>
           </ServingSVG>
-          <ServingInfo>5</ServingInfo>
+          <ServingInfo>{servingAmount}</ServingInfo>
           <ServingText>servings</ServingText>
 
           <ServingButtonPart>
-            <Minus>
+            <Minus onClick={() => changeServingAmount("dec")}>
               <svg>
                 <use xlinkHref={`${icons}#icon-circle-with-minus`}></use>
               </svg>
             </Minus>
-            <Plus>
+            <Plus onClick={() => changeServingAmount("inc")}>
               <svg>
                 <use xlinkHref={`${icons}#icon-circle-with-plus`}></use>
               </svg>
@@ -83,8 +84,8 @@ function recipe({ state }) {
     return (
       <ListContainer>
         <ListUl>
-          {recipesData.map((el: any) => (
-            <ItemLi key={recipesData.indexOf(el)}>
+          {updatedArr.map((el: any) => (
+            <ItemLi key={updatedArr.indexOf(el)}>
               <CheckSVG>
                 <svg>
                   <use xlinkHref={`${icons}#icon-check`}></use>
@@ -129,7 +130,15 @@ function mapStateToProps(state: any) {
   return { state };
 }
 
-export default connect(mapStateToProps)(recipe);
+function mapDispatchToProps(dispatch: any) {
+  return {
+    changeServingAmount: (btn: string) => {
+      dispatch({ type: "servingController", btn });
+    },
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(recipe);
 
 const ServingButtonPart = styled.div`
   display: flex;

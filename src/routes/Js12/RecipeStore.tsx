@@ -2,16 +2,23 @@ export interface RecipeState {
   recipeOriginal: {};
   recipesData: [];
   loading: boolean;
+  serving: { servingAmount: number; updatedArr: [] };
 }
 
 export interface RecipeAction {
-  type: "addRecipes" | "recipeLoading";
+  type: "addRecipes" | "recipeLoading" | "servingController";
   resultRecipeObj: any;
   loadingCheck: boolean;
+  btn: string;
 }
 
 export default function recipesInfo(
-  state: RecipeState = { recipeOriginal: {}, recipesData: [], loading: false },
+  state: RecipeState = {
+    recipeOriginal: {},
+    recipesData: [],
+    loading: false,
+    serving: { servingAmount: 1, updatedArr: [] },
+  },
   action: RecipeAction
 ) {
   switch (action.type) {
@@ -19,6 +26,8 @@ export default function recipesInfo(
       return fuxxingChaosUnit(state, action);
     case "recipeLoading":
       return { ...state, loading: !state.loading };
+    case "servingController":
+      return servingUpdate(state, action);
     default:
       return state;
   }
@@ -69,13 +78,12 @@ function fuxxingChaosUnit(state: RecipeState, action: RecipeAction) {
       //! splice(from index, remove how many , optional) = it just modify original array
       const findFractionPart = spliting.slice(0, unitIndex);
       const findMinusFraction = findFractionPart[0].split("");
-      const fuxxkingCount = parseInt(
+      const fuxxkingCount = parseFloat(
         (
           parseInt(findMinusFraction[0]) -
           parseInt(findMinusFraction[2]) / parseInt(findMinusFraction[4])
         ).toFixed(1)
       );
-
       //? case1
       //const spliting = ["2","1/2","unit"......]
       //const findFractionPart = ["2","1/2"]
@@ -141,5 +149,35 @@ function fuxxingChaosUnit(state: RecipeState, action: RecipeAction) {
     ...state,
     recipeOriginal: action.resultRecipeObj,
     recipesData: newArray,
+    serving: { ...state.serving, updatedArr: newArray },
   };
+}
+
+function servingUpdate(state: RecipeState, action: RecipeAction) {
+  const { servingAmount } = state.serving;
+  if (action.btn === "dec" && servingAmount > 1) {
+    return {
+      ...state,
+      serving: {
+        servingAmount: servingAmount - 1,
+        updatedArr: state.recipesData.map((el: any) => {
+          const newEl = { ...el, count: el.count * (servingAmount - 1) };
+          return newEl;
+        }),
+      },
+    };
+  } else if (action.btn === "inc") {
+    return {
+      ...state,
+      serving: {
+        servingAmount: servingAmount + 1,
+        updatedArr: state.recipesData.map((el: any) => {
+          const newEl = { ...el, count: el.count * (servingAmount + 1) };
+          return newEl;
+        }),
+      },
+    };
+  } else {
+    return { ...state };
+  }
 }
