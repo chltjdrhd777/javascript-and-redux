@@ -4,7 +4,7 @@ import { LoadingBarCreator } from "./ResultList";
 import { connect } from "react-redux";
 import icons from "../img/icons.svg";
 
-function recipe({ state, changeServingAmount }) {
+function recipe({ state, changeServingAmount, sendDataToShoppingUI }) {
   const { loading, recipesData } = state.recipesInfo;
   const { servingAmount, updatedArr } = state.recipesInfo.serving;
   const {
@@ -13,7 +13,6 @@ function recipe({ state, changeServingAmount }) {
     publisher,
     source_url,
   } = state.recipesInfo.recipeOriginal;
-  console.log(state);
 
   return (
     <Recipe>
@@ -100,7 +99,9 @@ function recipe({ state, changeServingAmount }) {
             </ItemLi>
           ))}
         </ListUl>
-        <SendDataToShoppingButton>
+        <SendDataToShoppingButton
+          onClick={() => sendDataToShoppingUI(updatedArr)}
+        >
           <svg>
             <use xlinkHref={`${icons}#icon-shopping-cart`}></use>
           </svg>
@@ -134,6 +135,9 @@ function mapDispatchToProps(dispatch: any) {
   return {
     changeServingAmount: (btn: string) => {
       dispatch({ type: "servingController", btn });
+    },
+    sendDataToShoppingUI: (updatedArr: []) => {
+      dispatch({ type: "receiveThisShoppingList", updatedArr });
     },
   };
 }
@@ -233,7 +237,7 @@ const ServingSVG = styled(TimerSVG)`
 const ServingInfo = styled(TimingInfo)``;
 const ServingText = styled(TimingText)``;
 
-const Plus = styled.button`
+export const Plus = styled.button`
   height: 1.75rem;
   width: 1.75rem;
   border: none;
@@ -342,6 +346,9 @@ const SendDataToShoppingButton = styled.button`
   transition: all 0.2s;
   &:hover {
     transform: scale(1.05);
+  }
+  &:active {
+    transform: translateY(1px);
   }
   &:focus {
     outline: none;

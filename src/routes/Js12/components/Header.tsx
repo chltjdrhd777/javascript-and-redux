@@ -19,10 +19,6 @@ async function getAPI(query: string) {
 }
 
 function header({ state, textChange, textSubmitted, nowLoading }) {
-  const testText = "1/2";
-  const target = Number.isInteger(parseInt(testText));
-  console.log(target);
-
   const sendSearchValue = (e: any) => {
     e.preventDefault();
     if (state.reducer.value === "") {
