@@ -4,8 +4,9 @@ export interface ShoppingState {
 }
 
 export interface ShoppingAction {
-  type: "receiveThisShoppingList";
+  type: "receiveThisShoppingList" | "deleteList";
   updatedArr: [];
+  id: string;
 }
 
 export default function shoppingList(
@@ -21,6 +22,9 @@ export default function shoppingList(
         return newArr;
       });
       return { ...state, items: Idgranted };
+    case "deleteList":
+      const deleteUpdate = state.items.filter((el: any) => el.id !== action.id);
+      return { ...state, items: deleteUpdate };
     default:
       return state;
   }

@@ -4,9 +4,10 @@ import { connect } from "react-redux";
 import icons from "../img/icons.svg";
 import { Plus } from "./Recipe";
 
-function shopping({ state }) {
+function shopping({ state, deleteList }) {
   console.log(state);
   const { items } = state.shoppingList;
+
   return (
     <Shopping>
       <Heading2>My shopping List</Heading2>
@@ -26,7 +27,7 @@ function shopping({ state }) {
                   <p>{el.unit}</p>
                 </ShoppingCount>
                 <ShoppingIngredient>{el.ingredient}</ShoppingIngredient>
-                <ShoppingDelete>
+                <ShoppingDelete onClick={() => deleteList(el.id)}>
                   <svg>
                     <use xlinkHref={`${icons}#icon-circle-with-cross`}></use>
                   </svg>
@@ -49,7 +50,13 @@ function shopping({ state }) {
 function mapStateToProps(state: any) {
   return { state };
 }
-function mapDispatchToProps(dispatch: any) {}
+function mapDispatchToProps(dispatch: any) {
+  return {
+    deleteList: (id: string) => {
+      dispatch({ type: "deleteList", id });
+    },
+  };
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(shopping);
 

@@ -3,13 +3,15 @@ export interface RecipeState {
   recipesData: [];
   loading: boolean;
   serving: { servingAmount: number; updatedArr: [] };
+  likesArr: string[];
 }
 
 export interface RecipeAction {
-  type: "addRecipes" | "recipeLoading" | "servingController";
+  type: "addRecipes" | "recipeLoading" | "servingController" | "LikesChecking";
   resultRecipeObj: any;
   loadingCheck: boolean;
   btn: string;
+  id: string;
 }
 
 export default function recipesInfo(
@@ -18,6 +20,7 @@ export default function recipesInfo(
     recipesData: [],
     loading: false,
     serving: { servingAmount: 1, updatedArr: [] },
+    likesArr: [],
   },
   action: RecipeAction
 ) {
@@ -28,6 +31,8 @@ export default function recipesInfo(
       return { ...state, loading: !state.loading };
     case "servingController":
       return servingUpdate(state, action);
+    case "LikesChecking":
+      return likesChecker(state, action);
     default:
       return state;
   }
@@ -78,12 +83,10 @@ function fuxxingChaosUnit(state: RecipeState, action: RecipeAction) {
       //! splice(from index, remove how many , optional) = it just modify original array
       const findFractionPart = spliting.slice(0, unitIndex);
       const findMinusFraction = findFractionPart[0].split("");
-      const fuxxkingCount = parseFloat(
-        (
-          parseInt(findMinusFraction[0]) -
-          parseInt(findMinusFraction[2]) / parseInt(findMinusFraction[4])
-        ).toFixed(1)
-      );
+      const fuxxkingCount =
+        parseInt(findMinusFraction[0]) -
+        parseInt(findMinusFraction[2]) / parseInt(findMinusFraction[4]);
+
       //? case1
       //const spliting = ["2","1/2","unit"......]
       //const findFractionPart = ["2","1/2"]
@@ -104,7 +107,7 @@ function fuxxingChaosUnit(state: RecipeState, action: RecipeAction) {
         // const spliting = ["1-1/2","unit"....]
         // const findFractionPart = ["1-1/2"]
         finalReturnValue = {
-          count: fuxxkingCount,
+          count: +fuxxkingCount.toFixed(1),
           unit: spliting[1],
           ingredient: spliting.slice(2).join(" "),
         };
@@ -149,7 +152,7 @@ function fuxxingChaosUnit(state: RecipeState, action: RecipeAction) {
     ...state,
     recipeOriginal: action.resultRecipeObj,
     recipesData: newArray,
-    serving: { ...state.serving, updatedArr: newArray },
+    serving: { servingAmount: 1, updatedArr: newArray },
   };
 }
 
@@ -161,7 +164,10 @@ function servingUpdate(state: RecipeState, action: RecipeAction) {
       serving: {
         servingAmount: servingAmount - 1,
         updatedArr: state.recipesData.map((el: any) => {
-          const newEl = { ...el, count: el.count * (servingAmount - 1) };
+          const newEl = {
+            ...el,
+            count: (el.count * (servingAmount - 1)).toFixed(1),
+          };
           return newEl;
         }),
       },
@@ -172,12 +178,25 @@ function servingUpdate(state: RecipeState, action: RecipeAction) {
       serving: {
         servingAmount: servingAmount + 1,
         updatedArr: state.recipesData.map((el: any) => {
-          const newEl = { ...el, count: el.count * (servingAmount + 1) };
+          const newEl = {
+            ...el,
+            count: (el.count * (servingAmount + 1)).toFixed(1),
+          };
           return newEl;
         }),
       },
     };
   } else {
     return { ...state };
+  }
+}
+
+function likesChecker(state: RecipeState, action: RecipeAction) {
+  const criteria = state.likesArr.findIndex((el) => el === action.id);
+  if (criteria === -1) {
+    return { ...state, likesArr: [...state.likesArr, action.id] };
+  } else {
+    const newArr = state.likesArr.filter((el): any => el !== action.id);
+    return { ...state, likesArr: newArr };
   }
 }

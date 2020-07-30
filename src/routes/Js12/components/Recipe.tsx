@@ -4,7 +4,7 @@ import { LoadingBarCreator } from "./ResultList";
 import { connect } from "react-redux";
 import icons from "../img/icons.svg";
 
-function recipe({ state, changeServingAmount, sendDataToShoppingUI }) {
+function recipe({ state, changeServingAmount, sendDataToShoppingUI, likes }) {
   const { loading, recipesData } = state.recipesInfo;
   const { servingAmount, updatedArr } = state.recipesInfo.serving;
   const {
@@ -12,6 +12,7 @@ function recipe({ state, changeServingAmount, sendDataToShoppingUI }) {
     title,
     publisher,
     source_url,
+    recipe_id,
   } = state.recipesInfo.recipeOriginal;
 
   return (
@@ -70,7 +71,7 @@ function recipe({ state, changeServingAmount, sendDataToShoppingUI }) {
           </ServingButtonPart>
         </Serving>
 
-        <LikeItPart>
+        <LikeItPart onClick={() => likes(recipe_id)}>
           <LikeItSVG>
             <use xlinkHref={`${icons}#icon-heart-outlined`}></use>
           </LikeItSVG>
@@ -138,6 +139,9 @@ function mapDispatchToProps(dispatch: any) {
     },
     sendDataToShoppingUI: (updatedArr: []) => {
       dispatch({ type: "receiveThisShoppingList", updatedArr });
+    },
+    likes: (id: string) => {
+      dispatch({ type: "LikesChecking", id });
     },
   };
 }
@@ -280,6 +284,9 @@ const LikeItPart = styled.button`
   }
   &:focus {
     outline: none;
+  }
+  &:active {
+    transform: scale(1);
   }
   & svg {
     height: 2.75rem;

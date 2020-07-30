@@ -4,7 +4,6 @@ import logo from "../img/logo.png";
 import icons from "../img/icons.svg";
 
 import { connect } from "react-redux";
-import { State } from "../SearchStore";
 import axios from "axios";
 
 async function getAPI(query: string) {
@@ -19,6 +18,7 @@ async function getAPI(query: string) {
 }
 
 function header({ state, textChange, textSubmitted, nowLoading }) {
+  const { likesArr } = state.recipesInfo;
   const sendSearchValue = (e: any) => {
     e.preventDefault();
     if (state.reducer.value === "") {
@@ -100,7 +100,13 @@ function header({ state, textChange, textSubmitted, nowLoading }) {
         </LikesField>
 
         <LikesPanel>
-          <LikesList>hi</LikesList>
+          <LikesUl>
+            {likesArr.length > 0
+              ? likesArr.map((el: React.ReactNode) => (
+                  <LikesLi key={Math.random()}>{el}</LikesLi>
+                ))
+              : null}
+          </LikesUl>
         </LikesPanel>
       </Likes>
     </Header>
@@ -108,7 +114,7 @@ function header({ state, textChange, textSubmitted, nowLoading }) {
 }
 
 //////? redux part //////
-function mapStateToProps(state: State) {
+function mapStateToProps(state: any) {
   return { state };
 }
 
@@ -246,6 +252,8 @@ const LikesIcon = styled.svg`
   width: 3.5rem;
 `;
 
-const LikesList = styled.ul`
+const LikesUl = styled.ul`
   list-style: none;
 `;
+
+const LikesLi = styled.li``;
