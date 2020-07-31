@@ -4,6 +4,8 @@ import logo from "../img/logo.png";
 import icons from "../img/icons.svg";
 
 import { connect } from "react-redux";
+import { mapDispatchToProps as inherit } from "./ResultList";
+
 import axios from "axios";
 
 async function getAPI(query: string) {
@@ -13,11 +15,11 @@ async function getAPI(query: string) {
     );
     return res.data.recipes;
   } catch (error) {
-    console.log(error);
+    alert("Sorry, there is no recipe for your search");
   }
 }
 
-function header({ state, textChange, textSubmitted, nowLoading }) {
+function header({ state, textChange, textSubmitted, nowLoading, inherited }) {
   const { likesArr } = state.recipesInfo;
   const sendSearchValue = (e: any) => {
     e.preventDefault();
@@ -32,7 +34,20 @@ function header({ state, textChange, textSubmitted, nowLoading }) {
     }
   };
 
-  //! don't want to type "pizza" redundantly
+  async function getRecipe(id: string) {
+    try {
+      inherited.makeRecipeLoading();
+      const res = await axios.get(
+        `https://forkify-api.herokuapp.com/api/get?rId=${id}`
+      );
+      inherited.sendRecipeInfo(res.data.recipe);
+      inherited.makeRecipeLoading();
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  /* //! don't want to type "pizza" redundantly
   const test = (e: any) => {
     e.preventDefault();
     nowLoading();
@@ -40,7 +55,7 @@ function header({ state, textChange, textSubmitted, nowLoading }) {
     textChange("");
   };
   window.addEventListener("load", (e) => test(e));
-  ////////////! //////////////////////////////////////////////
+  ////////////! ////////////////////////////////////////////// */
   ///////previous mistacke//////////////////
   /* const [state, setState] = useState({ value: "", result: [] });
   const handleChange = (e: any) => {
@@ -65,7 +80,6 @@ function header({ state, textChange, textSubmitted, nowLoading }) {
   //! you know what?
   //? I figured out this way was worse because I have to suffer from dealing with state in the other module.
   //? to avoid this fuxx shit, I am gonna use "redux"
-
   return (
     <Header>
       <Logo src={logo} />
@@ -102,8 +116,24 @@ function header({ state, textChange, textSubmitted, nowLoading }) {
         <LikesPanel>
           <LikesUl>
             {likesArr.length > 0
-              ? likesArr.map((el: React.ReactNode) => (
-                  <LikesLi key={Math.random()}>{el}</LikesLi>
+              ? likesArr.map((el) => (
+                  <LikesLi key={el.recipe_id}>
+                    <LikesA
+                      href={`#${el.recipe_id}`}
+                      onClick={(e: any) => {
+                        e.preventDefault();
+                        getRecipe(el.recipe_id);
+                      }}
+                    >
+                      <LikesFigure>
+                        <img src={el.image_url} alt="img" />
+                      </LikesFigure>
+                      <LikesData>
+                        <LikesH4>{el.title}</LikesH4>
+                        <LikesP>{el.publisher}</LikesP>
+                      </LikesData>
+                    </LikesA>
+                  </LikesLi>
                 ))
               : null}
           </LikesUl>
@@ -129,6 +159,7 @@ function mapDispatchToProps(dispatch: any) {
     nowLoading: () => {
       dispatch({ type: "nowLoading" });
     },
+    inherited: inherit(dispatch),
   };
 }
 
@@ -257,3 +288,60 @@ const LikesUl = styled.ul`
 `;
 
 const LikesLi = styled.li``;
+const LikesA = styled.a`
+  &:link,
+  &:visited {
+    display: flex;
+    align-items: center;
+    padding: 1.5rem 3rem;
+    transition: all 0.3s;
+    border-right: 1px solid #fff;
+    text-decoration: none;
+  }
+  &:hover {
+    background: #f9f5f3;
+    transform: translateY(-2px);
+  }
+`;
+const LikesFigure = styled.figure`
+  flex: 0 0 5.5rem;
+  border-radius: 50%;
+  overflow: hidden;
+  height: 5.5rem;
+  margin-right: 2rem;
+  position: relative;
+  backface-visibility: hidden;
+
+  &::before {
+    content: "";
+    display: block;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-image: linear-gradient(to right bottom, #fbdb89, #f48982);
+    opacity: 0.4;
+  }
+  & img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: all 0.3s;
+  }
+`;
+const LikesData = styled.div``;
+const LikesH4 = styled.h4`
+  font-size: 1.3rem;
+  color: #f59a83;
+  text-transform: uppercase;
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+`;
+const LikesP = styled.p`
+  font-size: 1.1rem;
+  color: #968b87;
+  text-transform: uppercase;
+  font-weight: 600;
+`;

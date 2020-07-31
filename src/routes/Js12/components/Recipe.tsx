@@ -5,14 +5,13 @@ import { connect } from "react-redux";
 import icons from "../img/icons.svg";
 
 function recipe({ state, changeServingAmount, sendDataToShoppingUI, likes }) {
-  const { loading, recipesData } = state.recipesInfo;
+  const { loading, recipesData, recipeOriginal, likesArr } = state.recipesInfo;
   const { servingAmount, updatedArr } = state.recipesInfo.serving;
   const {
     image_url,
     title,
     publisher,
     source_url,
-    recipe_id,
   } = state.recipesInfo.recipeOriginal;
 
   return (
@@ -71,9 +70,17 @@ function recipe({ state, changeServingAmount, sendDataToShoppingUI, likes }) {
           </ServingButtonPart>
         </Serving>
 
-        <LikeItPart onClick={() => likes(recipe_id)}>
+        <LikeItPart onClick={() => likes(recipeOriginal)}>
           <LikeItSVG>
-            <use xlinkHref={`${icons}#icon-heart-outlined`}></use>
+            <use
+              xlinkHref={
+                likesArr.find(
+                  (el: any) => el.recipe_id === recipeOriginal.recipe_id
+                )
+                  ? `${icons}#icon-heart`
+                  : `${icons}#icon-heart-outlined`
+              }
+            ></use>
           </LikeItSVG>
         </LikeItPart>
       </RecipeCal>
@@ -140,8 +147,8 @@ function mapDispatchToProps(dispatch: any) {
     sendDataToShoppingUI: (updatedArr: []) => {
       dispatch({ type: "receiveThisShoppingList", updatedArr });
     },
-    likes: (id: string) => {
-      dispatch({ type: "LikesChecking", id });
+    likes: (target: {}) => {
+      dispatch({ type: "LikesChecking", target });
     },
   };
 }
@@ -266,6 +273,10 @@ export const Plus = styled.button`
   }
 `;
 const Minus = styled(Plus)``;
+
+interface LikeAtt {
+  cssMaterial: any;
+}
 
 const LikeItPart = styled.button`
   background-image: linear-gradient(to right bottom, #fbdb89, #f48982);

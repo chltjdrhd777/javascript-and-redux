@@ -4,7 +4,7 @@ export interface ShoppingState {
 }
 
 export interface ShoppingAction {
-  type: "receiveThisShoppingList" | "deleteList";
+  type: "receiveThisShoppingList" | "deleteList" | "addRecipes";
   updatedArr: [];
   id: string;
 }
@@ -25,6 +25,9 @@ export default function shoppingList(
     case "deleteList":
       const deleteUpdate = state.items.filter((el: any) => el.id !== action.id);
       return { ...state, items: deleteUpdate };
+
+    case "addRecipes":
+      return { ...state, items: [] };
     default:
       return state;
   }

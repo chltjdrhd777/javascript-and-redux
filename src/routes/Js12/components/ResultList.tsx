@@ -125,7 +125,7 @@ function mapStateToProps(state: any) {
   return { state };
 }
 
-function mapDispatchToProps(dispatch: any) {
+export function mapDispatchToProps(dispatch: any) {
   return {
     incre: () => {
       dispatch({ type: "increasePage" });

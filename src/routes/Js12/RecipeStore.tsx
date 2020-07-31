@@ -3,7 +3,7 @@ export interface RecipeState {
   recipesData: [];
   loading: boolean;
   serving: { servingAmount: number; updatedArr: [] };
-  likesArr: string[];
+  likesArr: any[];
 }
 
 export interface RecipeAction {
@@ -11,7 +11,7 @@ export interface RecipeAction {
   resultRecipeObj: any;
   loadingCheck: boolean;
   btn: string;
-  id: string;
+  target: any;
 }
 
 export default function recipesInfo(
@@ -192,11 +192,15 @@ function servingUpdate(state: RecipeState, action: RecipeAction) {
 }
 
 function likesChecker(state: RecipeState, action: RecipeAction) {
-  const criteria = state.likesArr.findIndex((el) => el === action.id);
+  const criteria = state.likesArr.findIndex(
+    (el) => el.recipe_id === action.target.recipe_id
+  );
   if (criteria === -1) {
-    return { ...state, likesArr: [...state.likesArr, action.id] };
+    return { ...state, likesArr: [...state.likesArr, action.target] };
   } else {
-    const newArr = state.likesArr.filter((el): any => el !== action.id);
+    const newArr = state.likesArr.filter(
+      (el): any => el.recipe_id !== action.target.recipe_id
+    );
     return { ...state, likesArr: newArr };
   }
 }
